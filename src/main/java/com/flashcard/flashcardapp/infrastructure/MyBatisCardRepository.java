@@ -35,5 +35,11 @@ public class MyBatisCardRepository implements CardRepository{
     public Optional<Integer> getMaxId() {
         return cardMapper.getMaxId();
     }
+
+    @Override
+    public void reviewCard(Card card) {
+        cardMapper.reviewCard(card);
+    }
+
     
 }

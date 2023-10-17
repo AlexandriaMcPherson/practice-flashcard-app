@@ -4,6 +4,8 @@ public class CardFunctions {
 
     public static double calculateNewInterval(double prevInterval, float ease, int score) {
         switch (score) {
+            case 1:
+            return 0;
             case 2:
             return Math.max(prevInterval + 1.0, (prevInterval + score / 4) * 1.2);
             case 3:
@@ -26,6 +28,11 @@ public class CardFunctions {
             default:
             return prevEase;
         }
+    }
+
+    public static long calculateNewTimeMillis(double reviewInterval) {
+        // Current time + (interval * millis in a day)
+        return (long) (System.currentTimeMillis() + (reviewInterval * 86400000L));
     }
 
 

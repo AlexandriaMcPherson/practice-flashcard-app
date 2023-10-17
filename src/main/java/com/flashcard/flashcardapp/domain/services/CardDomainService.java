@@ -1,27 +1,27 @@
 package com.flashcard.flashcardapp.domain.services;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.flashcard.flashcardapp.domain.models.Card;
-import com.flashcard.flashcardapp.domain.services.CardFunctions;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CardDomainService {
+
+    private final CardRepository cardRepository;
     
     public List<Card> getAllCards() {
-        return Collections.emptyList();
+        return cardRepository.getAllCards();
     }
 
     public List<Card> getDueCards() {
-        return Collections.emptyList();
+        return cardRepository.getDueCards();
     }
 
     public Card addCard(Card card) {
@@ -36,38 +36,34 @@ public class CardDomainService {
         card.setCorrectInARow(0);
         card.setEase(2.5F);
 
-        return card;
+        return cardRepository.addCard(card);
     }
 
     public void reviewCard(Card card, int score) {
 
         // If fail
         if (score == 1) {
-            // Reset interval and correct in row
-            card.setReviewInterval(0);
+            // Reset correct in row
             card.setCorrectInARow(0);
-            
-            // Calculate new ease
-            card.setEase(CardFunctions.calculateNewEase(card.getEase(), score));
-
-            // Set new time due
-            var timeDue = new Timestamp(System.currentTimeMillis());
-            card.setTimeDue(timeDue);
-        } else { // If easy, ok, or hard
+        } else {
             // Update correct in a row
             card.setCorrectInARow(card.getCorrectInARow() + 1);
-            // Calculate new interval
-            double newInterval = CardFunctions.calculateNewInterval(card.getReviewInterval(), card.getEase(), score);
-            card.setReviewInterval(newInterval);
-
-            // Calculate new ease
-            card.setEase(CardFunctions.calculateNewEase(card.getEase(), score));
-
-            // Time due = now + interval in milliseconds
-            long newTimeDueMillis = (long) (System.currentTimeMillis() + (card.getReviewInterval() * 86400000L));
-            var timeDue = new Timestamp(newTimeDueMillis);
-            card.setTimeDue(timeDue);
         }
+        // Set new interval
+        double newInterval = CardFunctions.calculateNewInterval(card.getReviewInterval(), card.getEase(), score);
+        card.setReviewInterval(newInterval);
+
+        // Set new ease
+        card.setEase(CardFunctions.calculateNewEase(card.getEase(), score));
+
+        // Set new time due
+        long newTimeDueMillis = CardFunctions.calculateNewTimeMillis(card.getReviewInterval());
+        var timeDue = new Timestamp(newTimeDueMillis);
+        card.setTimeDue(timeDue);
+        
+        // Update database
+        cardRepository.reviewCard(card);
+        
     }
 
 }

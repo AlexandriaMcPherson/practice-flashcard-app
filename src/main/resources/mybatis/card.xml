@@ -7,7 +7,7 @@
         SELECT * FROM cards
     </select>
     <select id="getDueCards" resultType="com.flashcard.flashcardapp.domain.models.Card">
-        SELECT * FROM cards
+        SELECT * FROM cards WHERE time_due &lt; NOW()
     </select>
     <select id="getMaxId" resultType="int">
         SELECT MAX(id) AS max_id FROM cards
@@ -18,4 +18,9 @@
         VALUES
             (#{id}, N'#{card_front}', N'#{card_back}', N'#{notes}', #{time_due}, #{review_interval}, #{correct_in_a_row}, #{ease})
     </insert>
+    <update id="reviewCard" parameterType="com.flashcard.flashcardapp.domain.models.Card">
+        UPDATE cards
+        SET time_due=${time_due}, review_interval=${review_interval}, correct_in_a_row=${correct_in_a_row}, ease=${ease}
+        WHERE id = ${id}
+    </update>
   </mapper>

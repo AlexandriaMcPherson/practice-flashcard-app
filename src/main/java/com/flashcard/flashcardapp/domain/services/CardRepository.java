@@ -12,5 +12,7 @@ public interface CardRepository {
 
     Card addCard(Card card);
 
+    void reviewCard(Card card);
+
     Optional<Integer> getMaxId();
 }

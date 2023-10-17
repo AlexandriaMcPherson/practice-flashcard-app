@@ -12,5 +12,6 @@ public interface CardMapper {
     List<Card> getAllCards();
     List<Card> getDueCards();
     Card addCard(Card card);
+    void reviewCard(Card card);
     Optional<Integer> getMaxId();
 }
