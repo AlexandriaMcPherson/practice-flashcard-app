@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.flashcard.flashcardapp.infrastructure.CardMapper">
+    <select id="getAllCards" resultType="com.flashcard.flashcardapp.domain.models.Card">
+        SELECT * FROM cards
+    </select>
+    <select id="getDueCards" resultType="com.flashcard.flashcardapp.domain.models.Card">
+        SELECT * FROM cards
+    </select>
+    <select id="getMaxId" resultType="int">
+        SELECT MAX(id) AS max_id FROM cards
+    </select>
+    <insert id="addCard" parameterType="com.flashcard.flashcardapp.domain.models.Card">
+        INSERT INTO cards
+            (id, card_front, card_back, notes, time_due, review_interval, correct_in_a_row, ease)
+        VALUES
+            (#{id}, N'#{card_front}', N'#{card_back}', N'#{notes}', #{time_due}, #{review_interval}, #{correct_in_a_row}, #{ease})
+    </insert>
+  </mapper>
