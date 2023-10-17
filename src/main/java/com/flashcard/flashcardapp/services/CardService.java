@@ -25,6 +25,10 @@ public class CardService {
         return cardDomainService.getDueCards();
     }
 
+    public void reviewCard(Card card, int score) {
+        cardDomainService.reviewCard(card, score);
+    }
+
     public Card addCard(Card card) {
         return cardDomainService.addCard(card);
     }

@@ -27,6 +27,11 @@ public class MyBatisCardRepository implements CardRepository{
     }
 
     @Override
+    public void reviewCard(Card card) {
+        cardMapper.reviewCard(card);
+    }
+
+    @Override
     public Card addCard(Card card) {
         return cardMapper.addCard(card);
     }
@@ -35,11 +40,5 @@ public class MyBatisCardRepository implements CardRepository{
     public Optional<Integer> getMaxId() {
         return cardMapper.getMaxId();
     }
-
-    @Override
-    public void reviewCard(Card card) {
-        cardMapper.reviewCard(card);
-    }
-
     
 }

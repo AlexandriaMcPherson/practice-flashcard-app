@@ -62,7 +62,11 @@ public class CardDomainService {
         card.setTimeDue(timeDue);
         
         // Update database
-        cardRepository.reviewCard(card);
+        try {
+            cardRepository.reviewCard(card);
+        } catch (Exception e) {
+            // Handle errors when updating database
+        }
         
     }
 
