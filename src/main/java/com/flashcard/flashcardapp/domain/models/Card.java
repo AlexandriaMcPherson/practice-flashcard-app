@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Card {
     private int id;
+    private int lessonId;
     private String cardFront;
     private String cardBack;
     private String notes;

@@ -36,7 +36,9 @@ public class CardDomainService {
         card.setCorrectInARow(0);
         card.setEase(2.5F);
 
-        return cardRepository.addCard(card);
+        cardRepository.addCard(card);
+        
+        return card;
     }
 
     public void reviewCard(Card card, int score) {
@@ -65,9 +67,13 @@ public class CardDomainService {
         try {
             cardRepository.reviewCard(card);
         } catch (Exception e) {
-            // Handle errors when updating database
+            // TODO Handle errors when updating database
         }
         
+    }
+
+    public void activateCardSet(int lessonId) {
+        cardRepository.activateCardSet(lessonId);
     }
 
 }

@@ -29,6 +29,10 @@ public class CardService {
         cardDomainService.reviewCard(card, score);
     }
 
+    public void activateCardSet(int lessonId) {
+        cardDomainService.activateCardSet(lessonId);
+    }
+
     public Card addCard(Card card) {
         return cardDomainService.addCard(card);
     }

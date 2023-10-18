@@ -16,11 +16,17 @@
         INSERT INTO cards
             (id, card_front, card_back, notes, time_due, review_interval, correct_in_a_row, ease)
         VALUES
-            (#{id}, N'#{card_front}', N'#{card_back}', N'#{notes}', #{time_due}, #{review_interval}, #{correct_in_a_row}, #{ease})
+            (#{id}, #{cardFront}, #{cardBack}, #{notes}, #{timeDue}, #{reviewInterval}, #{correctInARow}, #{ease})
     </insert>
     <update id="reviewCard" parameterType="com.flashcard.flashcardapp.domain.models.Card">
         UPDATE cards
-        SET time_due=${time_due}, review_interval=${review_interval}, correct_in_a_row=${correct_in_a_row}, ease=${ease}
-        WHERE id = ${id}
+        SET time_due=#{time_due}, review_interval=#{review_interval}, correct_in_a_row=#{correct_in_a_row}, ease=#{ease}
+        WHERE id = #{id}
+    </update>
+    <update id="activateCardSet" parameterType="int">
+        UPDATE cards
+        SET time_due = NOW()
+        WHERE id=#{lessonId}
+        AND time_due IS NULL
     </update>
   </mapper>

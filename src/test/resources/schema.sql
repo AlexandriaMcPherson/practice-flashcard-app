@@ -1,9 +1,10 @@
 CREATE TABLE IF NOT EXISTS cards (
     id INT NOT NULL PRIMARY KEY,
+    lesson_id INT,
     card_front NVARCHAR(255) NOT NULL,
     card_back NVARCHAR(255),
     notes NVARCHAR(500),
-    time_due TIMESTAMP NOT NULL,
+    time_due TIMESTAMP,
     review_interval DOUBLE PRECISION NOT NULL,
     correct_in_a_row INT NOT NULL,
     ease FLOAT NOT NULL

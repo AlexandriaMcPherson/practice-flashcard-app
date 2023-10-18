@@ -6,7 +6,9 @@ import javax.sql.DataSource;
 import org.dbunit.Assertion;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.IDatabaseTester;
+import org.dbunit.dataset.SortedTable;
 import org.dbunit.dataset.csv.CsvURLDataSet;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -46,23 +48,36 @@ public class CardApiTest {
             MockMvcRequestBuilders.post("/add")
             .content(requestBody)
             .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON)
+            )
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect((result) -> JSONAssert.assertEquals(
             expectedBody,
             result.getResponse().getContentAsString(),
             new CustomComparator(
                 JSONCompareMode.LENIENT,
-                // Exclude time_due from test
-                new Customization("time_due", (o1, o2) -> true))
-            ));
+                // timestampは検証対象外とする(どんな値でもOK)
+                new Customization("timeDue", (o1, o2) -> true))
+        ));
+
+        String[] sortBy = {"id", "card_front", "card_back", "notes", "review_interval", "correct_in_a_row", "ease"};
+        String[] excludeColumns = {"time_due"};
 
         var actualDataSet = databaseTester.getConnection().createDataSet();
-        var actualChannelsTable = actualDataSet.getTable("channels");
+        var actualCardsTable = new SortedTable(
+      DefaultColumnFilter.excludedColumnsTable(
+            actualDataSet.getTable("cards"),
+            excludeColumns
+            ), sortBy
+        );
         var expectedUri = this.getClass().getResource("/cards/add/" + dbPath + "/expected/");
         var expectedDataSet = new CsvURLDataSet(expectedUri);
-        var expectedChannelsTable = expectedDataSet.getTable("cards");
-        Assertion.assertEquals(expectedChannelsTable, actualChannelsTable);
+        var expectedCardsTable = new SortedTable(
+            DefaultColumnFilter.excludedColumnsTable(
+              expectedDataSet.getTable("cards"),
+              excludeColumns
+            ), sortBy);
+        Assertion.assertEquals(expectedCardsTable, actualCardsTable);
 
     }
 
@@ -72,7 +87,8 @@ public class CardApiTest {
                 """
                     {
                         "cardFront": "add",
-                        "cardBack": "追加"
+                        "cardBack": "追加",
+                        "notes": "note to self"
                     }
                 """,
                 """
@@ -80,6 +96,7 @@ public class CardApiTest {
                         "id": 2,
                         "cardFront": "add",
                         "cardBack": "追加",
+                        "notes": "note to self",
                         "reviewInterval": 1.0,
                         "correctInARow": 0,
                         "ease": 2.5
@@ -91,7 +108,8 @@ public class CardApiTest {
                 """
                     {
                         "cardFront": "add",
-                        "cardBack": "追加"
+                        "cardBack": "追加",
+                        "notes": "note to self"
                     }
                 """,
                 """
@@ -99,6 +117,7 @@ public class CardApiTest {
                         "id": 2,
                         "cardFront": "add",
                         "cardBack": "追加",
+                        "notes": "note to self",
                         "reviewInterval": 1.0,
                         "correctInARow": 0,
                         "ease": 2.5
@@ -108,5 +127,98 @@ public class CardApiTest {
             )
         );
     }
+
+    @ParameterizedTest
+    @MethodSource("browseCardsTestProvider")
+    public void browseCardsTest(String expectedBody) throws Exception {
+        IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
+        var givenUrl = this.getClass().getResource("/cards/browse/given/");
+        databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
+        databaseTester.onSetup();
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/browse"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect((result) -> JSONAssert.assertEquals(
+            expectedBody,
+            result.getResponse().getContentAsString(),
+            new CustomComparator(
+                JSONCompareMode.LENIENT,
+                // Exclude time_due from test
+                new Customization("timeDue", (o1, o2) -> true))
+                ));
+
+    }
+
+    private static Stream<Arguments> browseCardsTestProvider() {
+        return Stream.of(
+            Arguments.arguments(
+                """
+                    [
+                        {
+                            "id": 1,
+                            "cardFront": "start",
+                            "cardBack": "開始",
+                            "notes": "note to self",
+                            "reviewInterval": 1.0,
+                            "correctInARow": 0,
+                            "ease": 2.5
+                        }
+                    ]
+                """
+            )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("studyCardsTestProvider")
+    public void studyCardsTest(String expectedBody) throws Exception {
+        IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
+        var givenUrl = this.getClass().getResource("/cards/study/given/");
+        databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
+        databaseTester.onSetup();
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/study"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect((result) -> JSONAssert.assertEquals(
+            expectedBody,
+            result.getResponse().getContentAsString(),
+            new CustomComparator(
+                JSONCompareMode.LENIENT,
+                // Exclude time_due from test
+                new Customization("timeDue", (o1, o2) -> true))
+                ));
+
+    }
+
+    private static Stream<Arguments> studyCardsTestProvider() {
+    return Stream.of(
+        Arguments.arguments(
+            """
+                [
+                    {
+                        "id": 1,
+                        "cardFront": "start",
+                        "cardBack": "開始",
+                        "notes": "note to self",
+                        "reviewInterval": 1.0,
+                        "correctInARow": 0,
+                        "ease": 2.5
+                    },
+                    {
+                        "id": 2,
+                        "cardFront": "add",
+                        "cardBack": "追加",
+                        "notes": "note to self",
+                        "reviewInterval": 1.0,
+                        "correctInARow": 0,
+                        "ease": 2.5
+                    }
+                ]
+            """
+        )
+    );
+}
 
 }

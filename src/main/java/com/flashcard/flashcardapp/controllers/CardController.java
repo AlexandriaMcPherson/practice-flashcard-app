@@ -2,7 +2,6 @@ package com.flashcard.flashcardapp.controllers;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,9 +39,17 @@ public class CardController {
         cardService.reviewCard(card, score);
     }
 
+    @PutMapping("/activate")
+    public void activateCardSet(int lessonId) {
+        // Set all cards belonging to a certain lesson active
+        // by changing the due date to now
+        cardService.activateCardSet(lessonId);
+    } 
+
     @PostMapping("/add")
-    public Card addCard(@RequestBody Card card) {
-        return cardService.addCard(card);
+    public ResponseEntity<Card> addCard(@RequestBody Card card) {
+        Card responseCard = cardService.addCard(card);
+        return ResponseEntity.ok(responseCard);
     }
     
 }

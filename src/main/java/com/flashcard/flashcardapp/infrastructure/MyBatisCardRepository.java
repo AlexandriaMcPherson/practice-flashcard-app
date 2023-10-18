@@ -32,13 +32,18 @@ public class MyBatisCardRepository implements CardRepository{
     }
 
     @Override
-    public Card addCard(Card card) {
-        return cardMapper.addCard(card);
+    public void addCard(Card card) {
+       cardMapper.addCard(card);
     }
 
     @Override
     public Optional<Integer> getMaxId() {
         return cardMapper.getMaxId();
+    }
+
+    @Override
+    public void activateCardSet(int lessonId) {
+        cardMapper.activateCardSet(lessonId);
     }
     
 }

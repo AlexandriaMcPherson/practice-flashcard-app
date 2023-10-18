@@ -10,9 +10,11 @@ public interface CardRepository {
 
     List<Card> getDueCards();
 
-    Card addCard(Card card);
+    void addCard(Card card);
 
     void reviewCard(Card card);
+
+    void activateCardSet(int lessonId);
 
     Optional<Integer> getMaxId();
 }
