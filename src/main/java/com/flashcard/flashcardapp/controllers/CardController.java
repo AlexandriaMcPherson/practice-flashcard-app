@@ -17,7 +17,7 @@ import com.flashcard.flashcardapp.services.CardService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/cards")
 @CrossOrigin
 @RequiredArgsConstructor
 public class CardController {

@@ -45,7 +45,7 @@ public class CardApiTest {
         databaseTester.onSetup();
 
         mockMvc.perform(
-            MockMvcRequestBuilders.post("/add")
+            MockMvcRequestBuilders.post("/cards/add")
             .content(requestBody)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
@@ -137,7 +137,7 @@ public class CardApiTest {
         databaseTester.onSetup();
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/browse"))
+            MockMvcRequestBuilders.get("/cards/browse"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect((result) -> JSONAssert.assertEquals(
             expectedBody,
@@ -179,7 +179,7 @@ public class CardApiTest {
         databaseTester.onSetup();
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/study"))
+            MockMvcRequestBuilders.get("/cards/study"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect((result) -> JSONAssert.assertEquals(
             expectedBody,
