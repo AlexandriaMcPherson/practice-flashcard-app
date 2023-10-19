@@ -148,6 +148,13 @@ public class CardApiTest {
                 new Customization("timeDue", (o1, o2) -> true))
                 ));
 
+        var actualDataSet = databaseTester.getConnection().createDataSet();
+        var actualCardsTable = actualDataSet.getTable("cards");
+        var expectedUri = this.getClass().getResource("/cards/browse/given/");
+        var expectedDataSet = new CsvURLDataSet(expectedUri);
+        var expectedCardsTable = expectedDataSet.getTable("cards");
+        Assertion.assertEquals(expectedCardsTable, actualCardsTable);
+
     }
 
     private static Stream<Arguments> browseCardsTestProvider() {
@@ -189,6 +196,13 @@ public class CardApiTest {
                 // Exclude time_due from test
                 new Customization("timeDue", (o1, o2) -> true))
                 ));
+
+        var actualDataSet = databaseTester.getConnection().createDataSet();
+        var actualCardsTable = actualDataSet.getTable("cards");
+        var expectedUri = this.getClass().getResource("/cards/study/given/");
+        var expectedDataSet = new CsvURLDataSet(expectedUri);
+        var expectedCardsTable = expectedDataSet.getTable("cards");
+        Assertion.assertEquals(expectedCardsTable, actualCardsTable);
 
     }
 

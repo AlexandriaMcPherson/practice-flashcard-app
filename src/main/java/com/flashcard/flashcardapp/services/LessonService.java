@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.flashcard.flashcardapp.domain.models.Lesson;
+import com.flashcard.flashcardapp.domain.models.LessonWithSlides;
 import com.flashcard.flashcardapp.domain.services.LessonDomainService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class LessonService {
     
     public List<Lesson> getAllLessons() {
         return lessonDomainService.getAllLessons();
+    }
+
+    public LessonWithSlides viewLesson(int lessonId) {
+        return lessonDomainService.viewLesson(lessonId);
     }
 
 }

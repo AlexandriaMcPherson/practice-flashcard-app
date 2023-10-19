@@ -17,9 +17,25 @@ CREATE TABLE IF NOT EXISTS lessons (
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS slides (
-    slide_id NOT NULL PRIMARY KEY,
-    lesson_id NOT NULL FOREIGN KEY REFERENCES lessons(lesson_id),
+    slide_id INT NOT NULL,
+    lesson_id INT NOT NULL,
     `text` NVARCHAR(500),
-    imageLoc VARCHAR(255),
-    audioLoc VARCHAR(255)
+    image_loc VARCHAR(255),
+    audio_loc VARCHAR(255),
+    PRIMARY KEY (slide_id),
+    CONSTRAINT fk_lesson_id
+    FOREIGN KEY (lesson_id) 
+    REFERENCES lessons(lesson_id) 
+    ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE table IF NOT EXISTS preferences (
+    interface_language VARCHAR(10) DEFAULT "English",
+    CONSTRAINT chk_interface_language CHECK (interface_language IN ("English", "Japanese")),
+    volume TINYINT NOT NULL DEFAULT 5,
+    CONSTRAINT chk_volume CHECK (volume > 0 AND volume < 10),
+    audio_on BOOLEAN NOT NULL DEFAULT TRUE,
+    hints_on BOOLEAN NOT NULL DEFAULT TRUE,
+    romaji_on BOOLEAN NOT NULL DEFAULT TRUE,
+    dark_mode BOOLEAN NOT NULL DEFAULT FALSE
+)

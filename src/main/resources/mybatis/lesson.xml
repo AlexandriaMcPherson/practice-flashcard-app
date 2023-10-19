@@ -6,4 +6,14 @@
     <select id="getAllLessons" resultType="com.flashcard.flashcardapp.domain.models.Lesson">
         SELECT * FROM lessons
     </select>
+    <select id="getLesson" resultType="com.flashcard.flashcardapp.domain.models.Lesson">
+      SELECT * 
+      FROM lessons
+      WHERE lesson_id = #{lessonID}
+    </select>
+    <select id="getSlidesForLesson" resultType="com.flashcard.flashcardapp.domain.models.Slide">
+      SELECT * 
+      FROM slides
+      WHERE lesson_id = #{lessonID}
+    </select>
   </mapper>

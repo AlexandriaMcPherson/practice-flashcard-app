@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.flashcard.flashcardapp.infrastructure.PreferencesMapper">
+    <select id="showPreferences" resultType="com.flashcard.flashcardapp.domain.models.Preferences">
+        SELECT * FROM preferences
+    </select>
+    <update id="updatePreferences" parameterType="com.flashcard.flashcardapp.domain.models.Preferences">
+      UPDATE preferences
+      SET interface_language=#{interfaceLanguage}, volume=#{volume}, audio_on=#{audioOn}, hints_on=#{hintsOn}, romaji_on=#{romajiOn}, dark_mode=#{darkMode}
+    </update>
+  </mapper>

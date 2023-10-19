@@ -1,0 +1,3 @@
+slide_id, lesson_id, text, image_loc, audio_loc
+1,1,testing add slide,12345.jpg,12345.wav
+2,1,second slide added, 123987.jpg,123987.wav
