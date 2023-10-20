@@ -36,6 +36,7 @@ public class CardApiTest {
     @Autowired
     private DataSource dataSource;
 
+    // TODO Card added is not valid, card added already exists (check if front in deck before saving)
     @ParameterizedTest
     @MethodSource("addCardTestProvider")
     public void addCardTest(String requestBody, String expectedBody, String dbPath) throws Exception {
@@ -128,6 +129,7 @@ public class CardApiTest {
         );
     }
 
+    // TODO Case when no cards exist, case when extremely large number of cards exist
     @ParameterizedTest
     @MethodSource("browseCardsTestProvider")
     public void browseCardsTest(String expectedBody) throws Exception {
@@ -177,6 +179,7 @@ public class CardApiTest {
         );
     }
 
+    // TODO Case when no cards are due, case when extremely large number of cards are due
     @ParameterizedTest
     @MethodSource("studyCardsTestProvider")
     public void studyCardsTest(String expectedBody) throws Exception {

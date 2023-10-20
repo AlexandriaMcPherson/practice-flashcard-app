@@ -42,7 +42,7 @@ CREATE table IF NOT EXISTS preferences (
     interface_language VARCHAR(10) DEFAULT "English",
     CONSTRAINT chk_interface_language CHECK (interface_language IN ("English", "Japanese")),
     volume TINYINT NOT NULL DEFAULT 5,
-    CONSTRAINT chk_volume CHECK (volume > 0 AND volume < 10),
+    --CONSTRAINT chk_volume CHECK (volume > 0 AND volume < 10),
     audio_on BOOLEAN NOT NULL DEFAULT TRUE,
     hints_on BOOLEAN NOT NULL DEFAULT TRUE,
     romaji_on BOOLEAN NOT NULL DEFAULT TRUE,

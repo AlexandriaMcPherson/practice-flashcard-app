@@ -21,7 +21,7 @@ public class PreferencesController {
         return preferencesService.showPreferences();
     }
 
-    @PutMapping("/update")
+    @PutMapping("/")
     public void updatePreferences(Preferences preferences) {
         preferencesService.updatePreferences(preferences);
     }
