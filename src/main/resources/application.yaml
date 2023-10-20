@@ -1,14 +1,19 @@
 spring:
-    datasource:
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/app_db
-        username: ${MYSQL_USER:root}
-        password: ${MYSQL_PASS:password}
+  datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/app_db
+      username: ${MYSQL_USER:root}
+      password: ${MYSQL_PASS:password}
 mybatis:
   mapper-locations: classpath*:mybatis/*.xml
   configuration:
     map-underscore-to-camel-case: true
     default-statement-timeout: 30
+jwt:
+  public:
+    key: classpath:app.key.pub
+  private:
+    key: classpath:app.key
 server:
   servlet:
     encoding:

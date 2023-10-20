@@ -1,6 +1,5 @@
 package com.flashcard.flashcardapp.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/preferences")
-@CrossOrigin
 @RequiredArgsConstructor
 public class PreferencesController {
     private final PreferencesService preferencesService;

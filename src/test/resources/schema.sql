@@ -29,7 +29,16 @@ CREATE TABLE IF NOT EXISTS slides (
     ON DELETE CASCADE
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+CREATE table IF NOT EXISTS users (
+    user_id INT NOT NULL,
+    username VARCHAR(64) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    PRIMARY KEY (user_id)
+)
+
 CREATE table IF NOT EXISTS preferences (
+    user_id INT NOT NULL,
     interface_language VARCHAR(10) DEFAULT "English",
     CONSTRAINT chk_interface_language CHECK (interface_language IN ("English", "Japanese")),
     volume TINYINT NOT NULL DEFAULT 5,
@@ -37,5 +46,9 @@ CREATE table IF NOT EXISTS preferences (
     audio_on BOOLEAN NOT NULL DEFAULT TRUE,
     hints_on BOOLEAN NOT NULL DEFAULT TRUE,
     romaji_on BOOLEAN NOT NULL DEFAULT TRUE,
-    dark_mode BOOLEAN NOT NULL DEFAULT FALSE
+    dark_mode BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_user_id
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+    ON DELETE CASCADE
 )
