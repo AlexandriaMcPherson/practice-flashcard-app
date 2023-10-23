@@ -14,12 +14,16 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootTest
 @AutoConfigureMockMvc
+@Slf4j
 public class PreferencesApiTest {
 
     @Autowired
@@ -79,7 +83,10 @@ public class PreferencesApiTest {
 
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/preferences/"))
+            MockMvcRequestBuilders.put("/preferences/")
+            .content(requestBody)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk());
 
         var actualDataSet = databaseTester.getConnection().createDataSet();
@@ -94,15 +101,15 @@ public class PreferencesApiTest {
         return Stream.of(
             Arguments.arguments(
                 """
-                        {
-                            "userId": 1,
-                            "interfaceLanguage": "Japanese",
-                            "volume": 8,
-                            "audioOn": false,
-                            "hintsOn": 7,
-                            "romajiOn": false,
-                            "darkMode": false
-                        }
+                    {
+                        "userId": 1,
+                        "interfaceLanguage": "Japanese",
+                        "volume": 8,
+                        "audioOn": false,
+                        "hintsOn": false,
+                        "romajiOn": false,
+                        "darkMode": false
+                    }
                 """,
                 "valid"
             ),
@@ -110,12 +117,12 @@ public class PreferencesApiTest {
                 """
                     {
                         "userId": 1,
-                        "interfaceLanguage": "Japanese",
-                        "volume": 8,
-                        "audioOn": false,
+                        "interfaceLanguage": "English",
+                        "volume": 4,
+                        "audioOn": true,
                         "hintsOn": 7,
-                        "romajiOn": false,
-                        "darkMode": false
+                        "romajiOn": true,
+                        "darkMode": true
                     }
                 """,
                 "invalid"

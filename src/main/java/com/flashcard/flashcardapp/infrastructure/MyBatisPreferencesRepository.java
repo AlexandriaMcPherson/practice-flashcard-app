@@ -20,6 +20,7 @@ public class MyBatisPreferencesRepository implements PreferencesRepository {
 
     @Override
     public void updatePreferences(Preferences preferences) {
+        System.out.println(preferences);
         preferencesMapper.updatePreferences(preferences);
     }
 

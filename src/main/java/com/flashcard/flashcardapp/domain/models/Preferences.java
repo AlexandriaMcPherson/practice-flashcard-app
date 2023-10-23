@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class Preferences {
+    private int userId;
     private String interfaceLanguage;
     private int volume;
     private boolean audioOn;

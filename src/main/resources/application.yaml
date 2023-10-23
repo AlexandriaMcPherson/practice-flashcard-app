@@ -4,11 +4,15 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/app_db
       username: ${MYSQL_USER:root}
       password: ${MYSQL_PASS:password}
+logging:
+  file:
+    path: './logs/'
 mybatis:
   mapper-locations: classpath*:mybatis/*.xml
-  configuration:
-    map-underscore-to-camel-case: true
-    default-statement-timeout: 30
+  config-location: classpath:myBatis-config.xml
+  # configuration:
+  #   map-underscore-to-camel-case: true
+  #   default-statement-timeout: 30
 jwt:
   public:
     key: classpath:app.key.pub
