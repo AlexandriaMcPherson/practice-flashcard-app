@@ -19,11 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import lombok.extern.slf4j.Slf4j;
-
 @SpringBootTest
 @AutoConfigureMockMvc
-@Slf4j
 public class PreferencesApiTest {
 
     @Autowired

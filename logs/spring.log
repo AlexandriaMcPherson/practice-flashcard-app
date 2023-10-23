@@ -771,3 +771,4 @@
 2023-10-23T15:51:22.422+09:00  INFO 36263 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
 2023-10-23T15:54:30.819+09:00  INFO 30858 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
 2023-10-23T15:54:30.823+09:00  INFO 30858 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+2023-10-23T16:06:06.556+09:00  WARN 36234 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m30s287ms).
