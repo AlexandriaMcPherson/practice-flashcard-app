@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.flashcard.flashcardapp.domain.models.Card;
+import com.flashcard.flashcardapp.exceptions.CardExistsException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +26,12 @@ public class CardDomainService {
     }
 
     public Card addCard(Card card) {
+
+        if (cardRepository.findCardByFront(card.getCardFront()).isPresent()) {
+            // return an error
+            throw new CardExistsException("Card with specified front already exists.");
+        }
+
         Optional<Integer> currentMaxId = Optional.of(1);
         var newid = currentMaxId.orElse(0) + 1;
         card.setId(newid);

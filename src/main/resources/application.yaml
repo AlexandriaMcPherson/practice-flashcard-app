@@ -7,6 +7,15 @@ spring:
 logging:
   file:
     path: './logs/'
+  level:
+    org:
+      springframework:
+        jdbc:
+          core: TRACE
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
+        mybatis: DEBUG
 mybatis:
   mapper-locations: classpath*:mybatis/*.xml
   config-location: classpath:myBatis-config.xml

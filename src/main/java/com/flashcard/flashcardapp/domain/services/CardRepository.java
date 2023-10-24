@@ -12,6 +12,8 @@ public interface CardRepository {
 
     void addCard(Card card);
 
+    Optional<Card> findCardByFront(String cardFront);
+
     void reviewCard(Card card);
 
     void activateCardSet(int lessonId);

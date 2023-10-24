@@ -1,27 +1,13 @@
 import mysql.connector
-# import pandas as pd
+from sqlalchemy import create_engine
+import pandas as pd
+import sqlalchemy
 
 
-# df = pd.read_csv("ja_en_utf8.tsv", sep='\t')
+df = pd.read_csv("list_1.csv", sep=',', quotechar='\"',encoding='utf8')
 
-conn = mysql.connector.connect(
-    host="localhost",
-    port= 3306,
-    user="root",
-    password="password",
-    database="app_db"
-)
+conn = create_engine("mysql+pymysql://root:password@localhost:3306/app_db?charset=utf8mb4")
 
-cursor = conn.cursor()
+txt_cols = df.select_dtypes(include = ['object']).columns
 
-# df.to_sql("dictionary", conn, if_exists='replace', index=False)
-
-cursor.execute("CREATE TABLE IF NOT EXISTS dictionary (jp TEXT, en TEXT);")
-
-with open("ja_en_utf8.tsv", "r") as tsv_file:
-    for line in tsv_file:
-        columns = line.strip().split("\t")
-        cursor.execute("INSERT INTO dictionary (jp, en) VALUES (?, ?;", columns)
-
-conn.commit()
-conn.close()
+df.to_sql("dictionary", conn, if_exists='replace', index=False, dtype = {col_name: sqlalchemy.types.NVARCHAR(length=255) for col_name in txt_cols})

@@ -12,6 +12,7 @@ public interface CardMapper {
     List<Card> getAllCards();
     List<Card> getDueCards();
     void addCard(Card card);
+    Optional<Card> findCardByFront();
     void reviewCard(Card card);
     void activateCardSet(int lessonId);
     Optional<Integer> getMaxId();

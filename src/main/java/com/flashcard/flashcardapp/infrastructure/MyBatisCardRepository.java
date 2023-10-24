@@ -45,5 +45,10 @@ public class MyBatisCardRepository implements CardRepository{
     public void activateCardSet(int lessonId) {
         cardMapper.activateCardSet(lessonId);
     }
+
+    @Override
+    public Optional<Card> findCardByFront(String cardFront) {
+        return cardMapper.findCardByFront();
+    }
     
 }

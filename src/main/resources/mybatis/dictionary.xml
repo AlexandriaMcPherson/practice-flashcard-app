@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.flashcard.flashcardapp.infrastructure.DictionaryMapper">
+    <!-- <resultMap id="dictionaryResultMap" type="com.flashcard.flashcardapp.domain.models.Word">
+        <id property="wordJapanese" column="word_japanese" />
+        <result property="wordFurigana" column="word_furigana"/>
+        <result property="wordEnglish" column="word_english"/>
+        <result property="exampleJapanese" column="example_japanese"/>
+        <result property="exampleFurigana" column="example_furigana"/>
+        <result property="exampleEnglish" column="example_english"/>
+    </resultMap> -->
+    <select id="browseDictionary" resultType="com.flashcard.flashcardapp.domain.models.Word">
+        SELECT * FROM dictionary
+    </select>
+    <select id="searchEnglish" resultType="com.flashcard.flashcardapp.domain.models.Word">
+        <!-- UNSAFE, REPLACE WITH METHOD THAT PREVENTS SQL INJECTION -->
+        SELECT * FROM dictionary WHERE word_english LIKE CONCAT('%',${query},'%')
+    </select>
+        <select id="searchFurigana" resultType="com.flashcard.flashcardapp.domain.models.Word">
+        <!-- UNSAFE, REPLACE WITH METHOD THAT PREVENTS SQL INJECTION -->
+        SELECT * FROM dictionary WHERE word_furigana LIKE CONCAT('%',${query},'%')
+    </select>
+    <select id="searchJapanese" resultType="com.flashcard.flashcardapp.domain.models.Word">
+        <!-- UNSAFE, REPLACE WITH METHOD THAT PREVENTS SQL INJECTION -->
+        SELECT * FROM dictionary WHERE word_japanese LIKE CONCAT('%',${query},'%')
+    </select>
+  </mapper>

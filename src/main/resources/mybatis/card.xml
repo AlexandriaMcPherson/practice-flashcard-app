@@ -12,6 +12,9 @@
     <select id="getMaxId" resultType="int">
         SELECT MAX(id) AS max_id FROM cards
     </select>
+    <select id="getCardByFront" resultType="com.flashcard.flashcardapp.domain.models.Card">
+        SELECT * FROM cards WHERE card_front = #{cardFront}
+    </select>
     <insert id="addCard" parameterType="com.flashcard.flashcardapp.domain.models.Card">
         INSERT INTO cards
             (id, card_front, card_back, notes, time_due, review_interval, correct_in_a_row, ease)
