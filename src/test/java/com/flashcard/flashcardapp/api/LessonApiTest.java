@@ -53,7 +53,6 @@ public class LessonApiTest {
 
     }
 
-    // TODO Lesson requested doesn't exist, lesson requested has no slides
     private static Stream<Arguments> getAllLessonsTestProvider() {
         return Stream.of(
             Arguments.arguments(
@@ -79,7 +78,7 @@ public class LessonApiTest {
         databaseTester.onSetup();
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/lessons/1"))
+            MockMvcRequestBuilders.get("/lessons/" + lessonId))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect((result) -> JSONAssert.assertEquals(
             expectedBody,
@@ -97,9 +96,7 @@ public class LessonApiTest {
     private static Stream<Arguments> getSpecificLessonTestProvider() {
         return Stream.of(
             Arguments.arguments(
-                """
-                    1
-                """,
+                "1",
                 """
                     {
                     
@@ -124,6 +121,24 @@ public class LessonApiTest {
                                 "audioLoc": "123987.wav"
                             }
                         ]
+                    }
+                """
+            ),
+            Arguments.arguments(
+                "4",
+                "{}"
+            ),
+            Arguments.arguments(
+                "2",
+                """
+                    {
+                    
+                        "lesson": {
+                            "lessonId": 2,
+                            "title": "Lesson With No Slides",
+                            "description": "This lesson is missing slides"
+                        },
+                        "slides": []
                     }
                 """
             )
