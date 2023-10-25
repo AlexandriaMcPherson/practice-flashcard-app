@@ -13,7 +13,7 @@
         SELECT MAX(id) AS max_id FROM cards
     </select>
     <select id="getCardByFront" resultType="com.flashcard.flashcardapp.domain.models.Card">
-        SELECT * FROM cards WHERE card_front = #{cardFront}
+        SELECT * FROM cards WHERE card_front LIKE #{cardFront}
     </select>
     <insert id="addCard" parameterType="com.flashcard.flashcardapp.domain.models.Card">
         INSERT INTO cards

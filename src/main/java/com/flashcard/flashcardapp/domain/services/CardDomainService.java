@@ -10,9 +10,11 @@ import com.flashcard.flashcardapp.domain.models.Card;
 import com.flashcard.flashcardapp.exceptions.CardExistsException;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CardDomainService {
 
     private final CardRepository cardRepository;
@@ -26,8 +28,12 @@ public class CardDomainService {
     }
 
     public Card addCard(Card card) {
-
-        if (cardRepository.findCardByFront(card.getCardFront()).isPresent()) {
+        String cardFront = card.getCardFront();
+        log.info(cardFront);
+        Optional<Card> existingCard = cardRepository.findCardByFront(cardFront);
+        log.info(existingCard.toString());
+        if (!existingCard.isEmpty()) {
+            log.warn("Attempted to add card that exists in db");
             // return an error
             throw new CardExistsException("Card with specified front already exists.");
         }

@@ -48,7 +48,7 @@ public class MyBatisCardRepository implements CardRepository{
 
     @Override
     public Optional<Card> findCardByFront(String cardFront) {
-        return cardMapper.findCardByFront();
+        return cardMapper.getCardByFront(cardFront);
     }
     
 }

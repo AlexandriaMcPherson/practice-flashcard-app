@@ -39,7 +39,7 @@ public class CardApiTest {
     // TODO Card added is not valid, card added already exists (check if front in deck before saving)
     @ParameterizedTest
     @MethodSource("addCardTestProvider")
-    public void addCardTest(String requestBody, String expectedBody, String dbPath) throws Exception {
+    public void addCardTest(String requestBody, String expectedBody, String dbPath, int httpStatus) throws Exception {
         IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
         var givenUrl = this.getClass().getResource("/cards/add/" + dbPath + "/given/");
         databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
@@ -51,7 +51,7 @@ public class CardApiTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             )
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.status().is(httpStatus))
         .andExpect((result) -> JSONAssert.assertEquals(
             expectedBody,
             result.getResponse().getContentAsString(),
@@ -103,7 +103,8 @@ public class CardApiTest {
                         "ease": 2.5
                     }
                 """,
-                "no-record"
+                "no-record",
+                200
             ),
             Arguments.arguments(
                 """
@@ -124,7 +125,25 @@ public class CardApiTest {
                         "ease": 2.5
                     }
                 """,
-                "multi-record"
+                "multi-record",
+                200
+            ),
+            Arguments.arguments(
+                """
+                    {
+                        "cardFront": "start",
+                        "cardBack": "開始",
+                        "notes": "note to self"
+                    }
+                """,
+                """
+                    {
+                        "status": 409,
+                        "error": "409 CONFLICT \\\"Card with specified front already exists.\\\""
+                    }
+                """,
+                "conflict",
+                409
             )
         );
     }

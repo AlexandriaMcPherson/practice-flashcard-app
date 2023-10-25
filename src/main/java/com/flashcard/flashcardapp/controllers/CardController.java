@@ -1,6 +1,8 @@
 package com.flashcard.flashcardapp.controllers;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flashcard.flashcardapp.domain.models.Card;
 import com.flashcard.flashcardapp.exceptions.CardExistsException;
+import com.flashcard.flashcardapp.exceptions.CustomErrorResponse;
 import com.flashcard.flashcardapp.services.CardService;
 
 import lombok.RequiredArgsConstructor;
@@ -55,9 +58,12 @@ public class CardController {
     }
 
     @ExceptionHandler(CardExistsException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<String> handleCardFrontExistsException(CardExistsException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    // @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<CustomErrorResponse> handleCardFrontExistsException(CardExistsException e) {
+        CustomErrorResponse error = new CustomErrorResponse();
+        error.setError(e.getMessage());
+        error.setStatus(HttpStatus.CONFLICT.value());
+        return new ResponseEntity<CustomErrorResponse>(error, null, HttpStatus.CONFLICT.value());
     }
     
 }
