@@ -15,15 +15,16 @@
         SELECT * FROM dictionary
     </select>
     <select id="searchEnglish" resultType="com.flashcard.flashcardapp.domain.models.Word">
-        <!-- UNSAFE, REPLACE WITH METHOD THAT PREVENTS SQL INJECTION -->
-        SELECT * FROM dictionary WHERE word_english LIKE CONCAT('%',${query},'%')
+        SELECT * 
+        FROM dictionary 
+        WHERE word_english LIKE #{query}
     </select>
-        <select id="searchFurigana" resultType="com.flashcard.flashcardapp.domain.models.Word">
-        <!-- UNSAFE, REPLACE WITH METHOD THAT PREVENTS SQL INJECTION -->
-        SELECT * FROM dictionary WHERE word_furigana LIKE CONCAT('%',${query},'%')
+    <select id="searchFurigana" resultType="com.flashcard.flashcardapp.domain.models.Word">
+        SELECT * 
+        FROM dictionary 
+        WHERE word_furigana LIKE #{query}
     </select>
     <select id="searchJapanese" resultType="com.flashcard.flashcardapp.domain.models.Word">
-        <!-- UNSAFE, REPLACE WITH METHOD THAT PREVENTS SQL INJECTION -->
-        SELECT * FROM dictionary WHERE word_japanese LIKE CONCAT('%',${query},'%')
+        SELECT * FROM dictionary WHERE word_japanese LIKE #{query}
     </select>
   </mapper>

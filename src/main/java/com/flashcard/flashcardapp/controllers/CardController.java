@@ -18,12 +18,10 @@ import com.flashcard.flashcardapp.exceptions.CardExistsException;
 import com.flashcard.flashcardapp.services.CardService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/cards")
 @RequiredArgsConstructor
-@Slf4j
 public class CardController {
 
     private final CardService cardService;

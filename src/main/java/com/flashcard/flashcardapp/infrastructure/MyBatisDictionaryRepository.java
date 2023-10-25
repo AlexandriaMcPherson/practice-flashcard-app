@@ -22,16 +22,19 @@ public class MyBatisDictionaryRepository implements DictionaryRepository{
 
     @Override
     public List<Word> searchEnglish(String query) {
+        query = "%" + query + "%";
         return dictionaryMapper.searchEnglish(query);
     }
 
     @Override
     public List<Word> searchFurigana(String query) {
+        query = "%" + query + "%";
         return dictionaryMapper.searchFurigana(query);
     }
 
     @Override
     public List<Word> searchJapanese(String query) {
+        query = "%" + query + "%";
         return dictionaryMapper.searchJapanese(query);
     }
     
