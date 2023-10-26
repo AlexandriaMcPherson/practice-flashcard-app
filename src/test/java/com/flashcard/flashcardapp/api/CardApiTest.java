@@ -37,6 +37,11 @@ public class CardApiTest {
     private DataSource dataSource;
 
     // TODO Card added is not valid, card added already exists (check if front in deck before saving)
+    // Card fields are too long
+    // Card fields are malformed or invalid
+    // Card fields are absent
+    // Card itself is absent
+    // Request type is incorrect
     @ParameterizedTest
     @MethodSource("addCardTestProvider")
     public void addCardTest(String requestBody, String expectedBody, String dbPath, int httpStatus) throws Exception {

@@ -1,8 +1,6 @@
 package com.flashcard.flashcardapp.controllers;
 
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flashcard.flashcardapp.domain.models.Card;
+import com.flashcard.flashcardapp.exceptions.BadInputException;
 import com.flashcard.flashcardapp.exceptions.CardExistsException;
 import com.flashcard.flashcardapp.exceptions.CustomErrorResponse;
 import com.flashcard.flashcardapp.services.CardService;
@@ -55,15 +53,6 @@ public class CardController {
     public ResponseEntity<Card> addCard(@RequestBody Card card) {
         Card responseCard = cardService.addCard(card);
         return ResponseEntity.ok(responseCard);
-    }
-
-    @ExceptionHandler(CardExistsException.class)
-    // @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<CustomErrorResponse> handleCardFrontExistsException(CardExistsException e) {
-        CustomErrorResponse error = new CustomErrorResponse();
-        error.setError(e.getMessage());
-        error.setStatus(HttpStatus.CONFLICT.value());
-        return new ResponseEntity<CustomErrorResponse>(error, null, HttpStatus.CONFLICT.value());
     }
     
 }

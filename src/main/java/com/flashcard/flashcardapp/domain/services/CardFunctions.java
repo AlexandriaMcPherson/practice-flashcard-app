@@ -1,5 +1,9 @@
 package com.flashcard.flashcardapp.domain.services;
 
+import java.util.Optional;
+
+import com.flashcard.flashcardapp.domain.models.Card;
+
 public class CardFunctions {
 
     public static double calculateNewInterval(double prevInterval, float ease, int score) {
@@ -35,5 +39,22 @@ public class CardFunctions {
         return (long) (System.currentTimeMillis() + (reviewInterval * 86400000L));
     }
 
+    public static Optional<String> checkFieldValidity(Card card) {
+        String err = null;
+        
+        if (card.getCardFront() == null) {
+            err = "Card front is missing."; 
+        }
+        else if (card.getCardFront().length() > 255) {
+            err = "Card front must be under 255 characters.";
+        }
+        else if (card.getCardBack().length() > 255) {
+            err = "Card back must be under 255 characters.";
+        }
+        else if (card.getNotes().length() > 255) {
+            err = "Notes must be under 255 characters.";
+        }
+        return Optional.of(err);
+    }
 
 }
