@@ -1,7 +1,5 @@
 package com.flashcard.flashcardapp.domain.services;
 
-import java.util.Optional;
-
 import com.flashcard.flashcardapp.domain.models.Card;
 
 public class CardFunctions {
@@ -39,7 +37,7 @@ public class CardFunctions {
         return (long) (System.currentTimeMillis() + (reviewInterval * 86400000L));
     }
 
-    public static Optional<String> checkFieldValidity(Card card) {
+    public static String checkFieldValidity(Card card) {
         String err = null;
         
         if (card.getCardFront() == null) {
@@ -54,7 +52,7 @@ public class CardFunctions {
         else if (card.getNotes().length() > 255) {
             err = "Notes must be under 255 characters.";
         }
-        return Optional.of(err);
+        return err;
     }
 
 }

@@ -1,0 +1,4 @@
+id, card_front, card_back, notes, time_due, review_interval, correct_in_a_row, ease
+1, start, 開始,note to self,2030-10-16 06:25:47,1.0,0,2.5
+2, add, 追加,note to self,2030-10-16 06:25:47,1.0,0,2.5
+3, end, 終了,note to self,2030-10-16 06:25:47,1.0,0,2.5

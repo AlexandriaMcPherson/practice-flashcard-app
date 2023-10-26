@@ -1,7 +1,6 @@
 package com.flashcard.flashcardapp.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -39,9 +38,9 @@ public class CardService {
 
     public Card addCard(Card card) {
         // Check that request is valid
-        Optional<String> invalidFieldCheck = CardFunctions.checkFieldValidity(card);
-        if (invalidFieldCheck.isPresent()) {
-            throw new BadInputException(HttpStatus.BAD_REQUEST, String.valueOf(invalidFieldCheck.get()));
+        String invalidFieldCheck = CardFunctions.checkFieldValidity(card);
+        if (invalidFieldCheck != null) {
+            throw new BadInputException(HttpStatus.BAD_REQUEST, invalidFieldCheck);
         }
         return cardDomainService.addCard(card);
     }

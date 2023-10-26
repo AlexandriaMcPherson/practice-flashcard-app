@@ -36,12 +36,15 @@ public class CardApiTest {
     @Autowired
     private DataSource dataSource;
 
-    // TODO Card added is not valid, card added already exists (check if front in deck before saving)
+    // TEST CASES
+    // Add card when no cards exist
+    // Add card when other cards exist
+    // Add duplicate card
+    // Add card with blank front (other empty fields are OK)
     // Card fields are too long
     // Card fields are malformed or invalid
     // Card fields are absent
     // Card itself is absent
-    // Request type is incorrect
     @ParameterizedTest
     @MethodSource("addCardTestProvider")
     public void addCardTest(String requestBody, String expectedBody, String dbPath, int httpStatus) throws Exception {
@@ -63,7 +66,8 @@ public class CardApiTest {
             new CustomComparator(
                 JSONCompareMode.LENIENT,
                 // timestampは検証対象外とする(どんな値でもOK)
-                new Customization("timeDue", (o1, o2) -> true))
+                new Customization("timeDue", (o1, o2) -> true),
+                new Customization("timestamp", (o1, o2) -> true))
         ));
 
         String[] sortBy = {"id", "card_front", "card_back", "notes", "review_interval", "correct_in_a_row", "ease"};
@@ -143,22 +147,85 @@ public class CardApiTest {
                 """,
                 """
                     {
-                        "status": 409,
-                        "error": "409 CONFLICT \\\"Card with specified front already exists.\\\""
+                        "timestamp": null,
+                        "statusCode": 409,
+                        "statusName": "CONFLICT",
+                        "message": "Card with specified front already exists.",
+                        "data": null
                     }
                 """,
                 "conflict",
                 409
+            ),
+            Arguments.arguments(
+                """
+                    {
+                        "cardBack": "開始",
+                        "notes": "note to self"
+                    }
+                """,
+                """
+                    {
+                        "timestamp": null,
+                        "statusCode": 400,
+                        "statusName": "BAD_REQUEST",
+                        "message": "Card front is missing.",
+                        "data": null
+                    }
+                """,
+                "conflict",
+                400
+
+            ),
+            Arguments.arguments(
+                """
+                    {
+                        "cardFront": "too many characters zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+                        "cardBack": "開始",
+                        "notes": "note to self"
+                    }
+                """,
+                """
+                    {
+                        "timestamp": null,
+                        "statusCode": 400,
+                        "statusName": "BAD_REQUEST",
+                        "message": "Card front must be under 255 characters.",
+                        "data": null
+                    }
+                """,
+                "conflict",
+                400
+
+            ),
+            Arguments.arguments(
+                """
+                """,
+                """
+                    {
+                        "timestamp": null,
+                        "statusCode": 400,
+                        "statusName": "BAD_REQUEST",
+                        "message": "Request data missing or unreadable.",
+                        "data": null
+                    }
+                """,
+                "conflict",
+                400
+
             )
         );
     }
 
-    // TODO Case when no cards exist, case when extremely large number of cards exist
+    // TODO Case when extremely large number of cards exist
+    // TEST CASES
+    // Cards exist in db
+    // No cards exist in db
     @ParameterizedTest
     @MethodSource("browseCardsTestProvider")
-    public void browseCardsTest(String expectedBody) throws Exception {
+    public void browseCardsTest(String expectedBody, String dbPath) throws Exception {
         IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
-        var givenUrl = this.getClass().getResource("/cards/browse/given/");
+        var givenUrl = this.getClass().getResource("/cards/browse/" + dbPath + "/given/");
         databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
         databaseTester.onSetup();
 
@@ -176,7 +243,7 @@ public class CardApiTest {
 
         var actualDataSet = databaseTester.getConnection().createDataSet();
         var actualCardsTable = actualDataSet.getTable("cards");
-        var expectedUri = this.getClass().getResource("/cards/browse/given/");
+        var expectedUri = this.getClass().getResource("/cards/browse/" + dbPath + "/given/");
         var expectedDataSet = new CsvURLDataSet(expectedUri);
         var expectedCardsTable = expectedDataSet.getTable("cards");
         Assertion.assertEquals(expectedCardsTable, actualCardsTable);
@@ -198,17 +265,28 @@ public class CardApiTest {
                             "ease": 2.5
                         }
                     ]
+                """,
+                "cards"
+            ),
+            Arguments.arguments(
                 """
+                    []
+                """,
+                "no-cards"
             )
         );
     }
 
-    // TODO Case when no cards are due, case when extremely large number of cards are due
+    // TODO Case when extremely large number of cards are due
+    // TEST CASES
+    // Cards exist and are due
+    // Cards exist and are not due
+    // No cards exist
     @ParameterizedTest
     @MethodSource("studyCardsTestProvider")
-    public void studyCardsTest(String expectedBody) throws Exception {
+    public void studyCardsTest(String expectedBody, String dbPath) throws Exception {
         IDatabaseTester databaseTester = new DataSourceDatabaseTester(dataSource);
-        var givenUrl = this.getClass().getResource("/cards/study/given/");
+        var givenUrl = this.getClass().getResource("/cards/study/" + dbPath + "/given/");
         databaseTester.setDataSet(new CsvURLDataSet(givenUrl));
         databaseTester.onSetup();
 
@@ -226,7 +304,7 @@ public class CardApiTest {
 
         var actualDataSet = databaseTester.getConnection().createDataSet();
         var actualCardsTable = actualDataSet.getTable("cards");
-        var expectedUri = this.getClass().getResource("/cards/study/given/");
+        var expectedUri = this.getClass().getResource("/cards/study/" + dbPath + "/given/");
         var expectedDataSet = new CsvURLDataSet(expectedUri);
         var expectedCardsTable = expectedDataSet.getTable("cards");
         Assertion.assertEquals(expectedCardsTable, actualCardsTable);
@@ -257,7 +335,20 @@ public class CardApiTest {
                         "ease": 2.5
                     }
                 ]
+            """,
+            "cards-due"
+        ),
+        Arguments.arguments(
             """
+                []
+            """,
+            "no-cards-due"
+        ),
+        Arguments.arguments(
+            """
+                []
+            """,
+            "no-cards-exist"
         )
     );
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flashcard.flashcardapp.domain.models.Card;
 import com.flashcard.flashcardapp.exceptions.BadInputException;
-import com.flashcard.flashcardapp.exceptions.CardExistsException;
-import com.flashcard.flashcardapp.exceptions.CustomErrorResponse;
 import com.flashcard.flashcardapp.services.CardService;
 
 import lombok.RequiredArgsConstructor;
@@ -50,7 +49,7 @@ public class CardController {
     } 
 
     @PostMapping("/add")
-    public ResponseEntity<Card> addCard(@RequestBody Card card) {
+    public ResponseEntity<Card> addCard(@RequestBody Card card) throws HttpMessageNotReadableException {
         Card responseCard = cardService.addCard(card);
         return ResponseEntity.ok(responseCard);
     }

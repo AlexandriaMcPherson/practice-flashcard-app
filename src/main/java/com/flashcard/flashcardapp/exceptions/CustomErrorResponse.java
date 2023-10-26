@@ -17,4 +17,8 @@ public class CustomErrorResponse {
     private String statusName;
     private String message;
     private Object data;
+
+    public CustomErrorResponse() {
+        timestamp = new Date();
+    }
 }
